@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "261869303501",
+    "project_id": "videoshort-53400",
+    "storage_bucket": "videoshort-53400.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:261869303501:android:46f0748fd01e0d1d3b9b84",
+        "android_client_info": {
+          "package_name": "com.example.firebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7tDMyQbvuRG9i5imOPwvcqUfsy48W-Ic"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
