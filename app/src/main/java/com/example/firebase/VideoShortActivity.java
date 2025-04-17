@@ -1,11 +1,16 @@
 package com.example.firebase;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.VideoView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -16,6 +21,21 @@ public class VideoShortActivity extends AppCompatActivity {
 
     private ViewPager2 viewPager2;
     private VideosAdapter videosAdapter;
+    private List<Video1Model> videoList;
+
+    // Launcher để nhận kết quả từ UploadVideoActivity
+    private final ActivityResultLauncher<Intent> uploadVideoLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    String videoUrl = result.getData().getStringExtra("video_url");
+                    String title = result.getData().getStringExtra("video_title");
+                    String desc = result.getData().getStringExtra("video_desc");
+                    videoList.add(new Video1Model(title, desc, videoUrl));
+                    videosAdapter.notifyDataSetChanged();
+                }
+            }
+    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +45,16 @@ public class VideoShortActivity extends AppCompatActivity {
         setContentView(R.layout.activity_video_short);
 
         viewPager2 = findViewById(R.id.vpager);
+        Button btnUpload = findViewById(R.id.btnUpload);
+
+        // Xử lý sự kiện nhấn nút Upload
+        btnUpload.setOnClickListener(v -> {
+            Intent intent = new Intent(VideoShortActivity.this, UploadVideoActivity.class);
+            uploadVideoLauncher.launch(intent);
+        });
+
         setupVideos();
+
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -39,20 +68,16 @@ public class VideoShortActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     private void setupVideos() {
-        // Danh sách video từ Cloudinary (ví dụ tĩnh)
-        List<Video1Model> videoList = new ArrayList<>();
-        videoList.add(new Video1Model("Video 1", "Description 1", "https://res.cloudinary.com/dckj6mejp/video/upload/v1744422221/sample_u0ecvw.mp4"));
-//        videoList.add(new Video1Model("Video 2", "Description 2", "https://res.cloudinary.com/your_cloud_name/video/upload/v123456789/sample_video2.mp4"));
+        videoList = new ArrayList<>();
         // Thêm các video khác nếu cần
+        videoList.add(new Video1Model("La Ngâu", "Chuyến đi 2N1Đ", "https://res.cloudinary.com/dckj6mejp/video/upload/v1744422221/sample_u0ecvw.mp4"));
+        videoList.add(new Video1Model("Bình Thuận", "La Ngâu - Tánh Linh", "https://res.cloudinary.com/dckj6mejp/video/upload/v1744897583/dnrctnviyckytzqiocby.mp4"));
 
-        // Thiết lập adapter
         videosAdapter = new VideosAdapter(videoList);
         viewPager2.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
         viewPager2.setAdapter(videosAdapter);
     }
-
 }

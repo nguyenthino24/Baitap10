@@ -55,5 +55,5 @@ dependencies {
     implementation ("com.google.firebase:firebase-firestore:24.4.5")
     implementation ("com.google.firebase:firebase-storage:20.1.0")
     implementation ("com.firebaseui:firebase-ui-database:8.0.1")
-
+    implementation ("com.cloudinary:cloudinary-android:2.2.0")
 }
